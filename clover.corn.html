@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clover.corn - Entrance Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QR Libraries - Loaded with priority -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        /* Theme Variables */
+        :root {
+            --cursor-default: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAAD9bx+IAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVDhPzZExDsIwDEU9Eyv3Asy9AnMvxt4LMPcCTKzcKyvV+0mNUKmUKv6S9SInTmLpX37m867D2Bq/rXUatWn+uG+70R0A1V2q0+3vAIA6W9VpAIB6F9VpAIB6F9VpAIB6F9VpAIB+F9VpAIB/U9XpeQCAuU51mgCgLlL9L+S4FwCoyV+T+F0CQA3+muL8FADqS5yfdABy7K8vcc8D0Gv89SXOdwXoVf/1I78eAnp968f9D5G/O1uG5G/LIDW+8P2NlP6R0p9S+ndK8v6R0h9T+m9K4v0jpR9TUnpI6vF5AwM3mE8T2B9yAAAAAElFTkSuQmCC'), auto;
+            --cursor-pointer: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgS5pwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACNSURBVEhL7ZExDsIwDEU9E907MFfI3iswV8jeKzB3YO7E3onN0vX8pEpUpUop/pL1IyduYtmf7899X+86fH6G767TqEv924vVfPcHAKjXVH3vfwOAmqPqfACAuk3V8wAANUPV6XAAgAn66nA4AMAsfXU4HAAgS98v8LMBALX6X+P7IwDU7C9f4m8FQO/+msc9D8D6eP7j8w1v0U8X0S79+AAAAABJRU5ErkJggg=='), pointer;
+            
+            /* Default Blue Theme */
+            --win-border: #0055e5;
+            --win-title-start: #0058e6;
+            --win-title-mid: #3b8cf5;
+            --win-title-end: #0046b8;
+            --btn-primary-start: #98e072;
+            --btn-primary-mid: #68c33a;
+            --btn-primary-accent: #51b123;
+            --btn-primary-end: #3d9d0e;
+            --bg-grad-start: #73a1ff;
+            --bg-grad-mid: #3b8cf5;
+            --bg-grad-end: #245edb;
+        }
+
+        [data-theme="emerald"] {
+            --win-border: #0a5c0a;
+            --win-title-start: #0e8a0e;
+            --win-title-mid: #4ec44e;
+            --win-title-end: #086308;
+            --btn-primary-start: #72e0d3;
+            --btn-primary-mid: #3aa6c3;
+            --btn-primary-accent: #23a6b1;
+            --btn-primary-end: #0e859d;
+            --bg-grad-start: #73ff91;
+            --bg-grad-mid: #3bf55b;
+            --bg-grad-end: #24db49;
+        }
+
+        [data-theme="ruby"] {
+            --win-border: #8a0e0e;
+            --win-title-start: #b80000;
+            --win-title-mid: #f53b3b;
+            --win-title-end: #8a0000;
+            --btn-primary-start: #e0d372;
+            --btn-primary-mid: #c39a3a;
+            --btn-primary-accent: #b18c23;
+            --btn-primary-end: #9d7d0e;
+            --bg-grad-start: #ff7373;
+            --bg-grad-mid: #f53b3b;
+            --bg-grad-end: #db2424;
+        }
+
+        [data-theme="silver"] {
+            --win-border: #707070;
+            --win-title-start: #999999;
+            --win-title-mid: #d6d6d6;
+            --win-title-end: #555555;
+            --btn-primary-start: #e0e0e0;
+            --btn-primary-mid: #9c9c9c;
+            --btn-primary-accent: #888888;
+            --btn-primary-end: #666666;
+            --bg-grad-start: #e0e0e0;
+            --bg-grad-mid: #b0b0b0;
+            --bg-grad-end: #808080;
+        }
+
+        [data-theme="burnt-titanium"] {
+            --win-border: #1a1a2e;
+            --win-title-start: #4834d4;
+            --win-title-mid: #686de0;
+            --win-title-end: #30336b;
+            --btn-primary-start: #f093fb;
+            --btn-primary-mid: #f5576c;
+            --btn-primary-accent: #d53369;
+            --btn-primary-end: #7d0a42;
+            --bg-grad-start: #4834d4;
+            --bg-grad-mid: #22a6b3;
+            --bg-grad-end: #130f40;
+        }
+
+        * { cursor: var(--cursor-default); }
+        a, button, .xp-button, .win-btn, .app-item, .badge-login, [onclick], .admin-tab-btn { cursor: var(--cursor-pointer); }
+
+        body {
+            margin: 0; padding: 0;
+            background: var(--bg-grad-end) linear-gradient(to bottom, var(--bg-grad-start) 0%, var(--bg-grad-mid) 30%, var(--bg-grad-end) 60%, #1a1a1a 100%);
+            background-attachment: fixed;
+            font-family: "Tahoma", "Geneva", sans-serif;
+            color: #000;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        .top-bar {
+            width: 100%;
+            background: linear-gradient(to bottom, var(--win-title-mid) 0%, var(--win-title-start) 10%, var(--win-title-end) 50%, #000 100%);
+            height: 75px; border-bottom: 2px solid #000; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; align-items: center; padding: 0 30px; margin-bottom: 40px; position: relative; z-index: 10;
+        }
+
+        .logo-wrapper { display: flex; align-items: center; gap: 12px; }
+        .logo-text {
+            font-size: 34px; font-weight: 800; color: white; font-style: italic;
+            text-shadow: 2px 2px 0px #000, 0px 0px 8px rgba(255,255,255,0.4);
+            letter-spacing: -1.5px;
+        }
+        .logo-dot-corn { color: #bdf1ff; font-style: normal; }
+
+        .window {
+            background: #ece9d8; border: 3px solid var(--win-border); border-radius: 8px 8px 0 0;
+            width: 95%; max-width: 550px; box-shadow: 15px 15px 40px rgba(0,0,0,0.4);
+            position: relative; z-index: 5; transition: max-width 0.4s ease, border-color 0.5s ease;
+        }
+        .window.authenticated { max-width: 850px; }
+
+        .window-title {
+            background: linear-gradient(to bottom, var(--win-title-start) 0%, var(--win-title-mid) 10%, var(--win-title-start) 50%, var(--win-title-end) 100%);
+            padding: 4px 8px 4px 12px; color: white; font-weight: bold; font-size: 13px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.3); height: 30px;
+            transition: background 0.5s ease;
+        }
+
+        .win-btn {
+            width: 21px; height: 21px; border: 1px solid #fff; border-radius: 3px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.3); transition: filter 0.1s;
+        }
+        .win-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        .win-btn-min { background: linear-gradient(135deg, #6b92e6 0%, #2358da 100%); }
+        .win-btn-settings { background: linear-gradient(135deg, #a1a1a1 0%, #636363 100%); }
+        .win-btn-close { background: linear-gradient(135deg, #e7866a 0%, #c12716 100%); }
+
+        .window-content { padding: 30px; background: #f4f2e8; border-bottom: 1px solid #999; min-height: 350px; }
+
+        .xp-button {
+            background: linear-gradient(to bottom, #ffffff 0%, #ebeadb 50%, #e2e1d2 51%, #d6d5c4 100%);
+            border: 1px solid #003c74; border-radius: 3px; padding: 12px 20px;
+            font-weight: bold; color: #000; box-shadow: inset 0 1px 1px #fff, 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 15px; display: block; width: 100%; text-align: center; font-size: 14px;
+        }
+        .xp-button:hover { background: linear-gradient(to bottom, #fffad9 0%, #f9e391 50%, #f7d961 51%, #f3cb3e 100%); border-color: #ffad55; }
+        .xp-button.primary {
+            background: linear-gradient(to bottom, var(--btn-primary-start) 0%, var(--btn-primary-mid) 50%, var(--btn-primary-accent) 51%, var(--btn-primary-end) 100%);
+            border-color: #1e5e06; color: white; text-shadow: 1px 1px 1px #1e5e06; font-size: 16px;
+            transition: background 0.5s ease;
+        }
+
+        .inset-input {
+            width: 100%; padding: 10px; border-top: 2px solid #716f64; border-left: 2px solid #716f64;
+            border-bottom: 2px solid #ffffff; border-right: 2px solid #ffffff;
+            background-color: #fff; margin-bottom: 20px; outline: none; font-size: 14px;
+        }
+
+        .password-container { position: relative; margin-bottom: 20px; }
+        .password-mask {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 10px;
+            background: #fff; border-top: 2px solid #716f64; border-left: 2px solid #716f64;
+            border-bottom: 2px solid #ffffff; border-right: 2px solid #ffffff;
+            pointer-events: none; font-family: "Courier New", Courier, monospace;
+            font-weight: bold; font-size: 20px; line-height: 1; color: #000;
+            display: flex; align-items: center; overflow: hidden; white-space: nowrap;
+        }
+        .password-input-real {
+            width: 100%; padding: 10px; background: transparent; border: 2px solid transparent;
+            color: transparent; caret-color: #000; font-family: "Courier New", Courier, monospace;
+            font-size: 20px; outline: none; position: relative; z-index: 2;
+        }
+
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .app-item {
+            background: #ffffff; border: 1px solid #919b9c; height: 120px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-decoration: none; color: black; transition: transform 0.1s;
+        }
+        .app-item:hover { background: #e5f3ff; border-color: var(--win-title-start); transform: scale(1.02); }
+
+        .badge-login { background: #fff; border: 2px dashed var(--win-border); padding: 15px; text-align: center; margin-top: 20px; border-radius: 5px; cursor: pointer; }
+
+        .loading-overlay {
+            display: none; position: absolute; inset: 0; background: rgba(244, 242, 232, 0.9);
+            z-index: 20; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .message-box {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #ece9d8; border: 2px solid var(--win-border); padding: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5); z-index: 100; display: none; width: 400px;
+        }
+
+        .admin-tab-btn {
+            background: #dedcd3; border: 1px solid #999; border-bottom: none;
+            padding: 5px 15px; font-size: 12px; font-weight: bold; border-radius: 5px 5px 0 0;
+        }
+        .admin-tab-btn.active { background: #f4f2e8; margin-bottom: -1px; position: relative; z-index: 2; }
+        
+        .empty-state {
+            border: 2px dashed #b5b2a1; background: #eeede3;
+            padding: 40px; text-align: center; color: #716f64; font-size: 11px;
+        }
+
+        .footer-text {
+            color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            margin-top: 30px; font-size: 11px; text-align: center; padding-bottom: 40px;
+        }
+
+        .portal-entry {
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; border: 1px solid #999; padding: 10px; margin-bottom: 5px;
+            font-size: 12px; gap: 10px;
+        }
+
+        /* App Sandbox Overlay */
+        #app-sandbox {
+            position: fixed; inset: 0; background: #ece9d8; z-index: 1000;
+            display: none; flex-direction: column;
+        }
+        #sandbox-header {
+            background: linear-gradient(to bottom, var(--win-title-start) 0%, var(--win-title-mid) 10%, var(--win-title-start) 50%, var(--win-title-end) 100%);
+            height: 35px; color: white; display: flex; align-items: center; padding: 0 15px;
+            justify-content: space-between; font-weight: bold; font-size: 14px;
+        }
+        #sandbox-frame-container { flex: 1; border: 4px solid var(--win-border); background: white; overflow: auto; position: relative; }
+
+        #login-view, #portal-view, #create-account-view, #admin-view, #admin-create-view, #admin-dashboard-view, #recovery-view, #settings-view, #qr-reader-view { display: none; }
+        #login-view { display: block; }
+
+        /* QR Reader Styles */
+        #reader { width: 100%; min-height: 250px; background: #000; border: 4px solid var(--win-border); }
+        #qr-display-container { background: white; padding: 10px; border: 1px solid #999; margin: 10px auto; width: fit-content; }
+        
+        /* Custom File Input XP Style */
+        .xp-file-input-wrapper {
+            background: #fff;
+            border-top: 2px solid #716f64; border-left: 2px solid #716f64;
+            border-bottom: 2px solid #ffffff; border-right: 2px solid #ffffff;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="logo-wrapper">
+            <svg class="w-[60px] h-[60px]" viewBox="0 0 100 100">
+                <defs><linearGradient id="LeafGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#bcfc7d"/><stop offset="100%" style="stop-color:#0a2f1a"/></linearGradient></defs>
+                <path d="M50 50 Q52 85 42 96" stroke="#0a2f1a" stroke-width="4" fill="none"/>
+                <g transform="translate(50, 50)">
+                    <path d="M0 0 C-22-22-18-52 0-52 C18-52 22-22 0 0" fill="url(#LeafGrad)" stroke="#0a2f1a" stroke-width="0.5" transform="rotate(0)"/>
+                    <path d="M0 0 C-22-22-18-52 0-52 C18-52 22-22 0 0" fill="url(#LeafGrad)" stroke="#0a2f1a" stroke-width="0.5" transform="rotate(120)"/>
+                    <path d="M0 0 C-22-22-18-52 0-52 C18-52 22-22 0 0" fill="url(#LeafGrad)" stroke="#0a2f1a" stroke-width="0.5" transform="rotate(240)"/>
+                </g>
+            </svg>
+            <div class="logo-text">clover<span class="logo-dot-corn">.corn</span></div>
+        </div>
+    </div>
+
+    <div class="window" id="main-window">
+        <div class="window-title">
+            <div class="flex items-center gap-2">
+                <img src="https://img.icons8.com/color/16/000000/folder-invoices.png" alt="icon">
+                <span id="window-title-text">Enterprise Portal - Login v4.6</span>
+            </div>
+            <div class="flex gap-1.5">
+                <div onclick="showView('settings-view')" class="win-btn win-btn-settings" title="Settings">⚙</div>
+                <div class="win-btn win-btn-min">_</div>
+                <div id="logout-btn" onclick="handleLogout()" class="win-btn win-btn-close" style="display:none;">X</div>
+                <div onclick="location.reload()" class="win-btn win-btn-close">X</div>
+            </div>
+        </div>
+        
+        <div class="window-content relative">
+            <div id="loading" class="loading-overlay">
+                <span id="loading-msg" class="font-bold text-[#003399]">Processing...</span>
+            </div>
+
+            <!-- LOGIN VIEW -->
+            <div id="login-view">
+                <h2 class="text-sm mb-5 font-bold text-[#003399]">Organization Membership Login</h2>
+                
+                <div id="portal-selector-area" class="mb-4 hidden">
+                    <label class="text-[11px] font-bold text-gray-600 block mb-1 text-center">Active Institutional Gateway:</label>
+                    <select id="active-portal-select" class="inset-input !mb-4">
+                        <option value="default">Clover Enterprise (Standard)</option>
+                    </select>
+                </div>
+
+                <label class="text-[11px] font-bold text-gray-600 block mb-1">Clover ID (Email):</label>
+                <input type="email" id="login-email" class="inset-input" value="demo@clover.corn">
+                <label class="text-[11px] font-bold text-gray-600 block mb-1">Passphrase:</label>
+                <div class="password-container">
+                    <div id="login-pass-mask" class="password-mask">***********</div>
+                    <input type="password" id="login-password" class="password-input-real" value="password123" oninput="updateMask(this, 'login-pass-mask')">
+                </div>
+                
+                <button class="xp-button primary" onclick="handleLogin()">Login</button>
+                <button class="xp-button" onclick="showView('create-account-view')">Create Account</button>
+                <button class="xp-button" onclick="showView('admin-view')">Portal Administrator</button>
+
+                <div class="badge-login" onclick="startQRReader()">
+                    <img src="https://img.icons8.com/color/32/000000/id-card.png" class="mx-auto mb-2 opacity-80">
+                    <span class="text-blue-800 font-bold block text-sm">Log in with Clover ID Badge</span>
+                </div>
+            </div>
+
+            <!-- QR READER VIEW -->
+            <div id="qr-reader-view">
+                <h2 class="text-sm mb-4 font-bold text-[#003399]">Scan or Upload Clover Badge</h2>
+                <div id="reader" class="mb-4"></div>
+                
+                <div class="p-4 border border-gray-400 bg-white">
+                    <p class="text-[11px] font-bold text-[#003399] mb-2 uppercase italic underline">Secondary Auth: Upload Image</p>
+                    <p class="text-[10px] text-gray-600 mb-2">If camera access is blocked, select a saved badge photo:</p>
+                    
+                    <div class="xp-file-input-wrapper">
+                        <input type="file" id="qr-file-input" accept="image/*" class="text-[10px] w-full">
+                    </div>
+                    
+                    <button class="xp-button !p-2 !text-xs !mb-0 primary w-full" onclick="scanFile()">Process Uploaded Image</button>
+                </div>
+
+                <button class="xp-button mt-4" onclick="stopQRReader()">Cancel</button>
+            </div>
+
+            <!-- CREATE ACCOUNT -->
+            <div id="create-account-view">
+                <h2 class="text-sm mb-5 font-bold text-[#003399]">Member Registration</h2>
+                <input type="text" id="reg-name" class="inset-input" placeholder="Full Name">
+                <input type="email" id="reg-email" class="inset-input" placeholder="Email Address">
+                <div class="password-container">
+                    <div id="reg-pass-mask" class="password-mask"></div>
+                    <input type="password" id="reg-password" class="password-input-real" placeholder="Create Passphrase" oninput="updateMask(this, 'reg-pass-mask')">
+                </div>
+                <input type="text" id="reg-class-code" class="inset-input" placeholder="Class Code (Optional)">
+                <button class="xp-button primary" onclick="handleRegister()">Register</button>
+                <button class="xp-button" onclick="showView('login-view')">Back</button>
+            </div>
+
+            <!-- ADMIN DASHBOARD -->
+            <div id="admin-dashboard-view">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-bold text-blue-900 uppercase">Institutional Management Console</h2>
+                    <span class="text-[10px] font-mono px-2 py-0.5 bg-gray-200 border border-gray-400">ADMIN_MODE</span>
+                </div>
+
+                <div class="flex gap-1 ml-2">
+                    <button class="admin-tab-btn active" onclick="switchAdminTab('portals')">Institutional Portals</button>
+                    <button class="admin-tab-btn" onclick="switchAdminTab('apps')">App Deployment</button>
+                    <button class="admin-tab-btn" onclick="switchAdminTab('directory')">User Directory</button>
+                </div>
+
+                <div class="border border-gray-400 bg-white p-4 shadow-inner min-h-[320px]">
+                    <div id="admin-tab-portals" class="admin-tab-content">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs font-bold text-gray-700">Active Portals</h3>
+                            <button class="xp-button text-[10px] px-3 py-1 mb-0" onclick="showPortalCreator()">Create New Portal</button>
+                        </div>
+                        <div id="portal-list-container"></div>
+                    </div>
+
+                    <div id="admin-tab-apps" class="admin-tab-content hidden">
+                        <h3 class="text-xs font-bold text-gray-700 mb-3 text-center uppercase">Provision Service</h3>
+                        
+                        <div class="bg-gray-50 p-3 border border-gray-300 mb-4">
+                             <div class="flex items-center justify-between mb-2">
+                                <div class="text-[11px] font-bold text-blue-800">DEPLOYMENT MODE</div>
+                                <select id="app-mode-select" class="text-[10px] border border-gray-400" onchange="toggleAppInputMode()">
+                                    <option value="url">URL Mode (Standard)</option>
+                                    <option value="html">HTML Mode (Embed/Code)</option>
+                                </select>
+                             </div>
+                             
+                             <div class="flex flex-col gap-2 mb-2">
+                                <input type="text" id="new-app-name" class="inset-input !mb-0 !p-1.5 text-xs" placeholder="Application Title">
+                                
+                                <div id="app-url-input-container">
+                                    <input type="text" id="new-app-url" class="inset-input !mb-0 !p-1.5 text-xs" placeholder="Target URL (https://...)">
+                                </div>
+                                
+                                <div id="app-html-input-container" class="hidden">
+                                    <textarea id="new-app-html" class="inset-input !mb-0 !p-1.5 text-[10px] font-mono h-24" placeholder="Paste HTML / iframe / embed code here..."></textarea>
+                                </div>
+                             </div>
+                             <button class="xp-button primary !p-1 !text-[10px] !mb-0" onclick="handleDeployApp()">Register Application</button>
+                        </div>
+
+                        <div class="bg-blue-50 p-3 border border-blue-200 mb-4">
+                             <div class="text-[11px] font-bold text-blue-800 mb-2 uppercase">Portal Linkage</div>
+                             <div class="flex gap-2 mb-2">
+                                <select id="assign-app-select" class="inset-input !mb-0 !p-1.5 text-xs">
+                                    <option value="">Select App...</option>
+                                </select>
+                                <select id="assign-portal-select" class="inset-input !mb-0 !p-1.5 text-xs">
+                                    <option value="">Select Portal...</option>
+                                </select>
+                             </div>
+                             <button class="xp-button primary !p-1 !text-[10px] !mb-0" onclick="handleAssignApp()">Assign to Portal</button>
+                        </div>
+
+                        <div id="app-deployment-list" class="space-y-1"></div>
+                    </div>
+
+                    <div id="admin-tab-directory" class="admin-tab-content hidden">
+                        <h3 class="text-xs font-bold text-gray-700 mb-2">Registered User Database</h3>
+                        <div class="bg-gray-100 p-2 border border-inset h-48 overflow-y-auto text-[10px] font-mono" id="admin-user-list">Scanning...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PORTAL VIEW -->
+            <div id="portal-view">
+                <div class="mb-4 flex justify-between items-center text-xs font-bold text-blue-800 p-2 bg-blue-100 border border-blue-200 rounded">
+                    <span id="user-greeting">Welcome, Member</span>
+                    <button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px]" onclick="generateMyBadge()">Show My Badge</button>
+                </div>
+                <div id="badge-display-area" class="hidden bg-white border border-blue-300 p-4 mb-4 text-center">
+                    <div id="qr-display-container" class="mx-auto"></div>
+                    <p class="text-[10px] font-bold text-blue-900 mt-2">Clover ID Badge</p>
+                    <p class="text-[8px] text-gray-400 font-mono mt-1 break-all" id="badge-raw-data"></p>
+                    <button class="text-xs text-blue-600 mt-2 underline" onclick="document.getElementById('badge-display-area').classList.add('hidden')">Hide Badge</button>
+                </div>
+                <div class="app-grid" id="main-app-grid"></div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div id="settings-view">
+                <h2 class="text-sm mb-5 font-bold text-[#003399]">Portal Configuration</h2>
+                
+                <div class="bg-white border-2 border-gray-300 p-4 mb-4">
+                    <h3 class="text-[11px] font-bold text-blue-800 mb-3 uppercase">Visual Themes</h3>
+                    <label class="text-[10px] text-gray-600 mb-1 block">System Skin:</label>
+                    <select id="theme-select" class="inset-input !mb-4 !p-1.5 text-xs" onchange="changeTheme(this.value)">
+                        <option value="default">Blue</option>
+                        <option value="emerald">Emerald</option>
+                        <option value="ruby">Ruby</option>
+                        <option value="silver">Silver</option>
+                        <option value="burnt-titanium">Burnt Titanium</option>
+                    </select>
+                </div>
+
+                <div class="bg-white border-2 border-gray-300 p-4 mb-4">
+                    <h3 class="text-[11px] font-bold text-blue-800 mb-3 uppercase">Deployment Utility</h3>
+                    <div id="import-json-container" class="hidden">
+                        <input type="file" id="import-json-file" accept=".json" class="block w-full text-[10px] text-slate-500 mb-3">
+                        <button class="xp-button primary !py-1" onclick="handleImportJSON()">Deploy Package</button>
+                    </div>
+                    <button id="import-json-toggle-btn" class="xp-button text-xs py-1" onclick="toggleImportJSON()">Upload Class Config (JSON)</button>
+                </div>
+                <button class="xp-button text-xs py-1" onclick="clearData()">Wipe Local Archive</button>
+                <button class="xp-button primary" onclick="showView(lastView)">Close</button>
+            </div>
+
+            <!-- ADMIN VIEWS -->
+            <div id="admin-view">
+                <h2 class="text-sm mb-5 font-bold text-[#003399]">Administrative Terminal</h2>
+                <input type="text" id="admin-login-user" class="inset-input" placeholder="Admin Username">
+                <div class="password-container">
+                    <div id="admin-pass-mask" class="password-mask"></div>
+                    <input type="password" id="admin-password" class="password-input-real" placeholder="Admin Passphrase" oninput="updateMask(this, 'admin-password')">
+                </div>
+                <button class="xp-button primary" onclick="handleAdminLogin()">Admin Sign-in</button>
+                <button class="xp-button" onclick="showView('admin-create-view')">Create New Admin Account</button>
+                <button class="xp-button" onclick="showView('login-view')">Back</button>
+            </div>
+
+            <div id="admin-create-view">
+                <h2 class="text-sm mb-5 font-bold text-[#003399]">Provision Administrator</h2>
+                <input type="text" id="new-admin-user" class="inset-input" placeholder="Desired Username">
+                <div class="password-container">
+                    <div id="new-admin-pass-mask" class="password-mask"></div>
+                    <input type="password" id="new-admin-password" class="password-input-real" placeholder="Secure Passphrase" oninput="updateMask(this, 'new-admin-password')">
+                </div>
+                <button class="xp-button primary" onclick="handleAdminRegister()">Deploy Admin Account</button>
+                <button class="xp-button" onclick="showView('admin-view')">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP SANDBOX (FOR HTML APPS) -->
+    <div id="app-sandbox">
+        <div id="sandbox-header">
+            <span id="sandbox-title">Clover Virtual Environment</span>
+            <div class="win-btn win-btn-close" onclick="closeSandbox()">X</div>
+        </div>
+        <div id="sandbox-frame-container"></div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="portal-modal" class="message-box" style="width: 450px;">
+        <h2 class="text-sm mb-4 font-bold text-[#003399]">Portal Creation Wizard</h2>
+        <input type="text" id="new-portal-name" class="inset-input" placeholder="Institutional Name">
+        <input type="text" id="new-portal-code" class="inset-input" placeholder="Portal Code (Sub-domain)">
+        <div class="flex gap-2">
+            <button class="xp-button primary flex-1" onclick="handleCreatePortal()">Deploy Portal</button>
+            <button class="xp-button flex-1" onclick="document.getElementById('portal-modal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="message-box">
+        <p id="alert-text" class="text-xs font-bold text-blue-900 mb-4"></p>
+        <button class="xp-button" onclick="closeMessage()">OK</button>
+    </div>
+
+    <div class="footer-text">&copy; 2004-2009 Clover.corn Technologies Corporation.</div>
+
+    <script>
+        const STORAGE_KEY = 'clover_corn_v4_6';
+        let lastView = 'login-view';
+        let currentUser = null;
+        let selectedPortalCode = 'default';
+        let html5QrCode = null;
+
+        const getData = () => {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"users":{}, "admins":{"root":"admin123"}, "portals":[], "apps":[], "portalAssignments":{}, "theme":"default"}');
+            if(!data.portals) data.portals = [];
+            if(!data.apps) data.apps = [];
+            if(!data.portalAssignments) data.portalAssignments = {};
+            if(!data.admins) data.admins = {"root":"admin123"};
+            return data;
+        };
+        const saveData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+        window.updateMask = (input, maskId) => {
+            const maskEl = document.querySelector(`[id*="${maskId}"]`);
+            if(maskEl) maskEl.innerText = '*'.repeat(input.value.length);
+        };
+
+        window.showMessage = (text) => {
+            document.getElementById('alert-text').innerText = text;
+            document.getElementById('custom-alert').style.display = 'block';
+        };
+
+        window.closeMessage = () => document.getElementById('custom-alert').style.display = 'none';
+
+        window.showView = (viewId) => {
+            const views = ['login-view', 'portal-view', 'create-account-view', 'admin-view', 'admin-create-view', 'admin-dashboard-view', 'settings-view', 'qr-reader-view'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.style.display = 'none';
+            });
+            
+            const target = document.getElementById(viewId);
+            if(target) target.style.display = 'block';
+            if (viewId !== 'settings-view' && viewId !== 'qr-reader-view') lastView = viewId;
+
+            const win = document.getElementById('main-window');
+            const logout = document.getElementById('logout-btn');
+            
+            if (['portal-view', 'admin-dashboard-view'].includes(viewId)) {
+                win.classList.add('authenticated');
+                logout.style.display = 'block';
+            } else {
+                win.classList.remove('authenticated');
+                logout.style.display = 'none';
+            }
+
+            if(viewId === 'admin-dashboard-view') {
+                refreshPortalList();
+                refreshAppList();
+                refreshAssignmentSelectors();
+                refreshUserDirectory();
+            }
+            if(viewId === 'login-view') refreshLoginPortals();
+            if(viewId === 'portal-view') refreshPortalGrid();
+        };
+
+        // --- THEME LOGIC ---
+        window.changeTheme = (theme) => {
+            document.body.setAttribute('data-theme', theme);
+            const data = getData();
+            data.theme = theme;
+            saveData(data);
+        };
+
+        // --- CLOVER ID QR LOGIC ---
+        window.startQRReader = async () => {
+            showView('qr-reader-view');
+            
+            if (typeof Html5Qrcode === 'undefined') {
+                showMessage("Reader library still loading...");
+                return showView('login-view');
+            }
+
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+            try {
+                await html5QrCode.start(
+                    { facingMode: "user" }, 
+                    config, 
+                    (decodedText) => {
+                        handleBadgeLogin(decodedText);
+                    }
+                );
+            } catch (err) {
+                console.warn("Camera auto-start failed. Please use File Upload scan below.", err);
+            }
+        };
+
+        window.stopQRReader = async () => {
+            if (html5QrCode) {
+                try { await html5QrCode.stop(); } catch(e){}
+                html5QrCode = null;
+            }
+            showView('login-view');
+        };
+
+        window.scanFile = async () => {
+            const fileInput = document.getElementById('qr-file-input');
+            if (fileInput.files.length === 0) return showMessage("Please select an image first.");
+            
+            const file = fileInput.files[0];
+            const tempReader = new Html5Qrcode("reader");
+            
+            try {
+                const decodedText = await tempReader.scanFile(file, true);
+                handleBadgeLogin(decodedText);
+            } catch (err) {
+                console.error(err);
+                showMessage("Could not find a valid Clover QR code in that image.");
+            } finally {
+                tempReader.clear();
+            }
+        };
+
+        window.handleBadgeLogin = (qrData) => {
+            try {
+                const badge = JSON.parse(qrData);
+                if (badge.type !== 'CLOVER_ID') throw new Error();
+                
+                document.getElementById('login-email').value = badge.email;
+                document.getElementById('login-password').value = badge.pass;
+                updateMask(document.getElementById('login-password'), 'login-pass-mask');
+                
+                if (badge.portal) {
+                    const select = document.getElementById('active-portal-select');
+                    select.value = badge.portal;
+                }
+
+                stopQRReader();
+                handleLogin(); 
+            } catch (e) {
+                showMessage("Invalid Badge Data.");
+            }
+        };
+
+        window.generateMyBadge = () => {
+            const dataArea = document.getElementById('badge-display-area');
+            const container = document.getElementById('qr-display-container');
+            const rawLabel = document.getElementById('badge-raw-data');
+            container.innerHTML = ""; 
+            
+            const badgeData = {
+                type: 'CLOVER_ID',
+                email: currentUser.email,
+                pass: currentUser.password,
+                portal: selectedPortalCode
+            };
+
+            const jsonStr = JSON.stringify(badgeData);
+            rawLabel.innerText = jsonStr;
+
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(container, {
+                    text: jsonStr,
+                    width: 128,
+                    height: 128,
+                    colorDark : "#003399",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            }
+
+            dataArea.classList.remove('hidden');
+        };
+
+        // --- ORIGINAL LOGIC ---
+        window.handleLogin = () => {
+            const email = document.getElementById('login-email').value.toLowerCase();
+            const pass = document.getElementById('login-password').value;
+            const data = getData();
+            
+            selectedPortalCode = document.getElementById('active-portal-select').value || 'default';
+
+            if (email === 'demo@clover.corn' && pass === 'password123') {
+                currentUser = { name: "Demo User", email: 'demo@clover.corn', password: 'password123' };
+            } else if (data.users[email] && data.users[email].password === pass) {
+                currentUser = data.users[email];
+                currentUser.email = email;
+                if (currentUser.portalCode) selectedPortalCode = currentUser.portalCode;
+            } else {
+                return showMessage("Invalid login.");
+            }
+
+            document.getElementById('user-greeting').innerText = `Member: ${currentUser.name}`;
+            showView('portal-view');
+            refreshPortalGrid();
+        };
+
+        window.handleAdminRegister = () => {
+            const user = document.getElementById('new-admin-user').value;
+            const pass = document.getElementById('new-admin-password').value;
+            if(!user || !pass) return showMessage("Fields cannot be empty.");
+            const data = getData();
+            if(data.admins[user]) return showMessage("Admin already exists.");
+            data.admins[user] = pass;
+            saveData(data);
+            showMessage("Admin provisioned successfully.");
+            showView('admin-view');
+        };
+
+        window.handleAdminLogin = () => {
+            const user = document.getElementById('admin-login-user').value;
+            const pass = document.getElementById('admin-password').value;
+            const data = getData();
+            if (data.admins[user] === pass) showView('admin-dashboard-view');
+            else showMessage("Access Denied.");
+        };
+
+        window.showPortalCreator = () => { document.getElementById('portal-modal').style.display = 'block'; };
+
+        window.handleCreatePortal = () => {
+            const name = document.getElementById('new-portal-name').value;
+            const code = document.getElementById('new-portal-code').value;
+            if(!name || !code) return showMessage("Required fields missing.");
+            const data = getData();
+            if(data.portals.find(p => p.code === code)) return showMessage("Code already in use.");
+            data.portals.push({ name, code });
+            saveData(data);
+            document.getElementById('portal-modal').style.display = 'none';
+            refreshPortalList();
+            refreshAssignmentSelectors();
+        };
+
+        window.handleRegister = () => {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value.toLowerCase();
+            const pass = document.getElementById('reg-password').value;
+            const classCode = document.getElementById('reg-class-code').value;
+            if(!name || !email || !pass) return showMessage("Missing registration info.");
+            const data = getData();
+            if(data.users[email]) return showMessage("User already exists.");
+            data.users[email] = { name, password: pass, portalCode: classCode || 'default' };
+            saveData(data);
+            showMessage("Account created.");
+            showView('login-view');
+        };
+
+        window.handleDeployApp = () => {
+            const mode = document.getElementById('app-mode-select').value;
+            const name = document.getElementById('new-app-name').value;
+            let content = "";
+            if (mode === 'url') {
+                content = document.getElementById('new-app-url').value;
+                if(content && !content.startsWith('http')) content = 'https://' + content;
+            } else {
+                content = document.getElementById('new-app-html').value;
+            }
+            if(!name || !content) return showMessage("Required fields missing.");
+            const data = getData();
+            data.apps.push({ id: String(Date.now()), name, type: mode, content });
+            saveData(data);
+            document.getElementById('new-app-name').value = '';
+            document.getElementById('new-app-url').value = '';
+            document.getElementById('new-app-html').value = '';
+            refreshAppList();
+            refreshAssignmentSelectors();
+            showMessage(`Service '${name}' registered.`);
+        };
+
+        window.refreshAppList = () => {
+            const container = document.getElementById('app-deployment-list');
+            const data = getData();
+            let html = `<div class="border p-2 bg-green-50 text-[10px] font-bold">Lexia Core5 (System Native)</div>`;
+            data.apps.forEach(app => {
+                html += `<div class="border px-2 py-1 flex justify-between items-center bg-white text-[10px]"><span>[${app.type.toUpperCase()}] ${app.name}</span><button class="text-red-600 font-bold px-1" onclick="deleteApp('${app.id}')">X</button></div>`;
+            });
+            container.innerHTML = html;
+        };
+
+        window.deleteApp = (id) => {
+            const data = getData();
+            data.apps = data.apps.filter(a => a.id !== id);
+            for(let key in data.portalAssignments) { data.portalAssignments[key] = data.portalAssignments[key].filter(aid => aid !== id); }
+            saveData(data);
+            refreshAppList(); refreshAssignmentSelectors();
+        };
+
+        window.refreshUserDirectory = () => {
+            const container = document.getElementById('admin-user-list');
+            const data = getData();
+            let html = "DEMO USER (demo@clover.corn)<br>";
+            for(let email in data.users) { html += `${data.users[email].name.toUpperCase()} (${email}) - Portal: ${data.users[email].portalCode}<br>`; }
+            container.innerHTML = html;
+        };
+
+        window.refreshPortalGrid = () => {
+            const grid = document.getElementById('main-app-grid');
+            const data = getData();
+            let html = `<div class="app-item font-bold text-center" onclick="showMessage('Launching Lexia Core5...')">Lexia Core5</div>`;
+            const activeCode = selectedPortalCode || 'default';
+            const assignedIds = data.portalAssignments[activeCode] || [];
+            data.apps.filter(app => assignedIds.includes(app.id)).forEach(app => {
+                html += `<div class="app-item font-bold text-center" onclick="launchApp('${app.id}')">${app.name}<span class="text-[9px] font-normal text-blue-500 block mt-1">Open Service</span></div>`;
+            });
+            grid.innerHTML = html;
+        };
+
+        window.launchApp = (id) => {
+            const data = getData();
+            const app = data.apps.find(a => a.id === id);
+            if (!app) return;
+            if (app.type === 'url') window.open(app.content, '_blank');
+            else {
+                document.getElementById('sandbox-title').innerText = app.name;
+                const container = document.getElementById('sandbox-frame-container');
+                container.innerHTML = app.content;
+                document.getElementById('app-sandbox').style.display = 'flex';
+            }
+        };
+
+        window.onAuthStateChanged = (user) => {
+            if(!user) return;
+            // Persistence logic placeholder for future cloud upgrades
+        };
+
+        window.closeSandbox = () => { document.getElementById('app-sandbox').style.display = 'none'; document.getElementById('sandbox-frame-container').innerHTML = ''; };
+
+        window.handleAssignApp = () => {
+            const appId = document.getElementById('assign-app-select').value;
+            const portalCode = document.getElementById('assign-portal-select').value;
+            if(!appId || !portalCode) return showMessage("Please select both.");
+            const data = getData();
+            if(!data.portalAssignments[portalCode]) data.portalAssignments[portalCode] = [];
+            if(data.portalAssignments[portalCode].includes(appId)) return showMessage("Already assigned.");
+            data.portalAssignments[portalCode].push(appId);
+            saveData(data);
+            refreshPortalGrid();
+            showMessage("Application successfully linked.");
+        };
+
+        window.downloadPortalConfig = (portalCode) => {
+            const data = getData();
+            const portal = data.portals.find(p => p.code === portalCode);
+            if (!portal) return showMessage("Portal not found.");
+            const assignedAppIds = data.portalAssignments[portalCode] || [];
+            const apps = data.apps.filter(app => assignedAppIds.includes(app.id));
+            const blob = new Blob([JSON.stringify({ portalName: portal.name, portalCode: portal.code, apps }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `CloverConfig_${portalCode}.json`;
+            a.click();
+            showMessage("Config Generated.");
+        };
+
+        window.handleImportJSON = () => {
+            const fileInput = document.getElementById('import-json-file');
+            if(!fileInput.files.length) return showMessage("Select file.");
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const config = JSON.parse(e.target.result);
+                    const data = getData();
+                    const pCode = config.portalCode;
+                    if(!data.portals.find(p => p.code === pCode)) { data.portals.push({ name: config.portalName, code: pCode }); }
+                    if(!data.portalAssignments[pCode]) data.portalAssignments[pCode] = [];
+                    config.apps.forEach(a => {
+                        if(!data.apps.find(ea => ea.id === a.id)) data.apps.push(a);
+                        if(!data.portalAssignments[pCode].includes(a.id)) data.portalAssignments[pCode].push(a.id);
+                    });
+                    saveData(data);
+                    showMessage("Package Deployed.");
+                    refreshLoginPortals();
+                } catch(e) { showMessage("Invalid Config."); }
+            };
+            reader.readAsText(fileInput.files[0]);
+        };
+
+        window.refreshPortalList = () => {
+            const container = document.getElementById('portal-list-container');
+            const data = getData();
+            container.innerHTML = data.portals.map(p => `<div class="portal-entry"><div class="flex flex-col"><span class="font-bold">${p.name}</span><span class="text-[9px]">ID: ${p.code}</span></div><button class="bg-blue-600 text-white px-2 py-1 rounded text-[10px]" onclick="downloadPortalConfig('${p.code}')">Get JSON</button></div>`).join('') || '<div class="empty-state">No Portals</div>';
+        };
+
+        window.refreshLoginPortals = () => {
+            const select = document.getElementById('active-portal-select');
+            const data = getData();
+            if(data.portals.length > 0) {
+                document.getElementById('portal-selector-area').classList.remove('hidden');
+                select.innerHTML = '<option value="default">Standard Portal</option>' + data.portals.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
+            }
+        };
+
+        window.refreshAssignmentSelectors = () => {
+            const appSelect = document.getElementById('assign-app-select');
+            const portalSelect = document.getElementById('assign-portal-select');
+            const data = getData();
+            if(appSelect) appSelect.innerHTML = '<option value="">Select App...</option>' + data.apps.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            if(portalSelect) portalSelect.innerHTML = '<option value="default">Clover Enterprise</option>' + data.portals.map(p => `<option value="${p.code}">${p.name}</option>`).join('');
+        };
+
+        window.handleLogout = () => { currentUser = null; showView('login-view'); };
+        window.clearData = () => { localStorage.removeItem(STORAGE_KEY); location.reload(); };
+        window.toggleImportJSON = () => document.getElementById('import-json-container').classList.toggle('hidden');
+        window.toggleAppInputMode = () => {
+            const mode = document.getElementById('app-mode-select').value;
+            document.getElementById('app-url-input-container').classList.toggle('hidden', mode === 'html');
+            document.getElementById('app-html-input-container').classList.toggle('hidden', mode === 'url');
+        };
+        window.switchAdminTab = (tab) => {
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.add('hidden'));
+            event.target.classList.add('active');
+            document.getElementById(`admin-tab-${tab}`).classList.remove('hidden');
+        };
+
+        window.onload = () => {
+            refreshLoginPortals();
+            const data = getData();
+            if(data.theme) {
+                changeTheme(data.theme);
+                const themeSelect = document.getElementById('theme-select');
+                if(themeSelect) themeSelect.value = data.theme;
+            }
+        };
+    </script>
+</body>
+</html>
